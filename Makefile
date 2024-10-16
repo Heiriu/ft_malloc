@@ -6,14 +6,17 @@
 #    By: thbierne <thbierne@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/07 10:18:53 by thbierne          #+#    #+#              #
-#    Updated: 2024/09/02 14:52:34 by thbierne         ###   ########.fr        #
+#    Updated: 2024/10/16 12:11:40 by thbierne         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = malloc
+NAME = libft_malloc_$(HOSTTYPE)
 
-SRCS = 	main.c 						\
-		srcs/malloc.c 				\
+HEADER = include
+
+SL = libft_malloc.so
+
+SRCS = srcs/malloc.c 				\
 		srcs/free.c 				\
 		srcs/realloc.c 				\
 		srcs/utils.c 				\
@@ -21,9 +24,9 @@ SRCS = 	main.c 						\
 
 OBJS = $(SRCS:.c=.o)				\
 
-CC = gcc 
+CC = gcc
 
-LDFLAGS = -shared -fpic
+LDFLAGS = -fpic -shared 
 
 HOSTTYPE = $(shell uname -m)_$(shell uname -s)
 
@@ -33,10 +36,13 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 
-
+ifeq ($(HOSTTYPE),)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+endif
 
 	@echo "\033[0;32m [OK] \033[0m       \033[0;33m Compiling:\033[0m" $(SRCS)
-	@$(CC) $(SRCS) -o $(NAME)
+	@$(CC) $(LDFLAGS) $(SRCS) -I$(HEADER) -o $(NAME)
+	@ln -s $(NAME) $(SL)
 	@echo "\033[0;32m [OK] \033[0m       \033[0;33m Creating:\033[0m" $(NAME)
 
 
@@ -45,7 +51,7 @@ clean:
 	@echo "\033[0;32m [OK] \033[0m       \033[0;33m Delete:\033[0m" $(OBJS)
 
 fclean: clean
-	@$(RM) $(NAME)
+	@$(RM) $(NAME) $(SL)
 	@echo "\033[0;32m [OK] \033[0m       \033[0;33m Delete:\033[0m" $(NAME)
 
 re: fclean all

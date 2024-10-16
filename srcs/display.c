@@ -14,7 +14,7 @@ int display_memory(char *type, void *ptr, void **tab, int *tab_size, int nbr_all
 	{
 		if (tab[index] != NULL)
 		{
-			printf("%i| %p - %p : %i\n",index, tab[index], ((tab[index] + tab_size[index]) - 1), tab_size[index]);
+			printf("%p - %p : %i\n", tab[index], ((tab[index] + tab_size[index]) - 1), tab_size[index]);
 			count++;
 			bytes += tab_size[index];
 		}
